@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NAVER</title>
+    <style>
+        body{
+            background-color: #f5f6f7;
+            
+        }
+        .cha{
+            display: block;
+        }
+
+        .wrap{
+            width: 330px;
+            margin: 0 auto;
+        }
+        input{
+            height: 45px;
+            box-sizing: border-box;
+            border: 0;
+            outline: 0;
+        }
+        input[type="radio"]{
+            height: 15px;
+        }
+        .tinput{
+            width: 100%;
+            padding-left: 14px;
+        }
+        .form_el{
+            margin-bottom: 30px;
+        }
+        .form_la{
+            padding-left: 5px;
+            margin-bottom: 5px;
+        }
+        .logo{
+            width: 200px;
+            font-size: 30px;
+            color: #2DB400;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .regist input{
+            width: 100%;
+            background-color: #2DB400;
+            color: white;
+        }
+        .einput{
+            height: 45px;
+            width: 150px;
+        }
+        select{
+            width:  145px;
+            height: 45px;
+
+            border: none;
+        }
+        .a{
+            width: 15px;
+            display: inline-block;
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+
+        <div class="logo">
+            <h1>
+                NAVER
+            </h1>
+        </div>
+
+
+        <form action="어딘가서버" method="POST">
+            <div class="id form_el" >
+                <label>
+                    <span class="cha form_la">
+                        아이디
+                    </span>
+                    <input type="text" class="tinput" name="id" placeholder="아이디를 입력해 주세요">
+                </label>
+            </div>
+
+            <div class="pw form_el">
+                <label>
+                    <span class="cha form_la">
+                        비밀번호
+                    </span>
+                    <input type="password" class="tinput" name="pw" placeholder="비밀번호를 입력해 주세요">
+                </label>
+            </div>
+
+            <div class="pn form_el">
+                <label>
+                    <span class="cha form_la">
+                        전화번호
+                    </span>
+                    <input type="text" class="tinput" name="pn" placeholder="전화번호를 입력해 주세요">
+                </label>
+            </div>
+
+            <div class="em form_el">
+                    <span class="cha form_la">
+                        이메일
+                    </span>
+                    <input type="text" class="einput" name="em"><!---
+                --><div class="a">@</div><!--
+                ---><select name="em_host">
+                    <option value="-1">선택</option>
+                    <option value="sogang">sogang.ac.kr</option>
+                    <option value="naver">naver.com</option>
+                    <option value="gmail">gmail.com</option>
+                </select>
+            </div>
+            
+            <div class="form_el">
+                <div class="form_la">광고 수신 여부</div>
+                <div style="display: flex; justify-content: space-around;">
+                <label>
+                    <input type="radio" name="mailing" value="agree">
+                    <span>
+                        동의
+                    </span>
+                </label>
+                <label>
+                    <input type="radio" name="mailing" value="disagree">
+                    <span>
+                        거부
+                    </span>
+                </label>
+                </div>
+            </div>
+           
+            <div class="regist">
+                <input type="submit" value="가입하기" onclick="check()">
+            </div>
+        </form>
+
+        <script>
+            function check(){
+           // document.querySelector('input[type="submit"]').addEventListener("click", function(event){
+                event.preventDefault();
+
+               let inputID = document.querySelector("input[name='id']")
+               let inputPW = document.querySelector("input[name='pw']")
+               let inputPN = document.querySelector("input[name='pn']")
+                
+               if(inputID.value == ""){
+                   alert("아이디가 없어용")
+               }else if(inputPW.value ==""){
+                   alert("비번이 없어용")
+               }else if(inputPN.value ==""){
+                   alert("전번이 없어용")
+               }else{
+                   document.querySelector("form").submit()
+               }
+
+            }//);
+        </script>
+    </div>
+</body>
+</html>
