@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #select-button,.compt {
+            visibility: hidden;
+        }
+        .game{
+            display:inline;
+            width : 2000px;
+        }
+        canvas{
+            display:inline;
+        }
+        img{
+            width:200px;
+            height:200px;
+        }
+    </style>
+</head>
+<body>
+    <h1>
+        가위 바위 보
+    </h1>
+    
+    <button id="start-button" type="button" onclick="init()">시작</button>
+    
+    <div class ="game">    
+        <div id="webcam-container"></div>
+        <div id="label-container"></div>
+        
+        <div class="compt">
+            <span class="vs">
+                vs
+            </span>
+            <img id = "comimg" src="r.png">
+        </div>
+
+        <div class="player-wrap">
+            <span id="player">
+
+            </span>
+            <span>
+                <button id="select-button" type="button" onclick="f=true">결정</button>
+            </span>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
+    <script type="text/javascript">
+
+        const URL = "https://teachablemachine.withgoogle.com/models/L1_IDTwZt/";
+    
+        let model, webcam, labelContainer, maxPredictions;
+        let you=0;
+        let your_hand="가위";
+        let f = false;
+        let i=0;
+        let tinter = setInterval(cimg, 500);
+
+        //게임 시작 함수
+        async function init() {
+            alert('게임 시작!');
+            document.querySelector('#start-button').style.visibility="hidden";
+            document.querySelector('#select-button').style.visibility="visible";
+            document.querySelector('.compt').style.visibility="visible";
+            
+            const modelURL = URL + "model.json";
+            const metadataURL = URL + "metadata.json";
+            
+            model = await tmImage.load(modelURL, metadataURL);
+            maxPredictions = model.getTotalClasses();
+    
+            const flip = true; 
+            //캠 사이즈
+            webcam = new tmImage.Webcam(200, 200, flip); 
+            await webcam.setup(); 
+            await webcam.play();
+            
+            window.requestAnimationFrame(loop);
+            
+            document.getElementById("webcam-container").appendChild(webcam.canvas);
+        }
+    
+        async function loop() {
+            if(f){
+                rps();
+                clearTimeout(tinter);
+                return;
+            }
+            webcam.update();
+            await predict();
+            window.requestAnimationFrame(loop);
+            document.getElementById('player').innerHTML=your_hand;
+        }
+    
+        async function predict() {
+            const prediction = await model.predict(webcam.canvas);
+            if(prediction[0].probability>=prediction[1].probability&&prediction[0].probability>=prediction[2].probability){
+                //가위
+                your_hand="가위";
+                you=0;
+            }else if(prediction[1].probability>=prediction[0].probability&&prediction[1].probability>=prediction[2].probability){
+                //바위
+                your_hand="바위";
+                you=1;
+            }else{
+                //보
+                your_hand="보";
+                you=2;
+            }
+        }
+
+        function rps(){
+            let com=Math.floor(Math.random() * 4);
+            if(com==3) com=2;
+            let computer_hand="가위";
+
+            if(com==0){
+                computer_hand="가위";
+                document.getElementById("comimg").src="s.png";
+            }else if(com==1){
+                computer_hand="바위";
+                document.getElementById("comimg").src="r.png";
+            }else{
+                computer_hand="보";
+                document.getElementById("comimg").src="p.png";
+            }
+            
+            if(you==com){
+                //비김
+                alert('비김!');
+            }else if(you-com==1||you-com==-2){
+                //이김
+                alert('이김!');
+            }else{
+                //짐
+                alert('짐ㅋ!');
+            }
+        }
+
+        function cimg(){
+            i++;
+            i%=3;
+            if(i==0){
+                document.getElementById("comimg").src="r.png";
+            }else if(i==1){
+                document.getElementById("comimg").src="s.png";
+            }else{
+                document.getElementById("comimg").src="p.png";
+            }
+        }
+
+    </script>    
+</body>
+</html>
